@@ -2,6 +2,8 @@
 
 ## Description
 
+An application that managers and employees can use to make their jobs a little easier. 
+
 ## How To Use
 
 ## Acceptance Criteria
