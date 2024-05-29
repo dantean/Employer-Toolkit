@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Department, Employee } = require('../models');
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 
@@ -18,6 +18,9 @@ const resolvers = {
       }
 
       throw new AuthenticationError('You need to be logged in!');
+    },
+    getAllDepartments: async () => {
+      return await Department.find({}).populate('employees');
     },
   },
 
@@ -50,32 +53,43 @@ const resolvers = {
       return { token, user };
     },
 
-    saveBook: async (parent, { bookData }, context) => {
-      if (context.user) {
-        const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { savedBooks: bookData } },
-          { new: true, runValidators: true }
-        );
-
-        return updatedUser;
+    addEmployee: async (parent, { name, email, departmentId }) => {
+      const department = await Department.findById(departmentId);
+      if (!department) {
+        throw new Error('Department not found');
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      const employee = await Employee.create({ name, email, department: departmentId });
+      department.employees.push(employee);
+      await department.save();
+
+      return employee;
     },
 
-    deleteBook: async (parent, { bookId }, context) => {
-      if (context.user) {
-        const updatedUser = await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $pull: { savedBooks: { bookId } } },
-          { new: true }
-        );
-
-        return updatedUser;
+    reassignEmployee: async (parent, { employeeId, newDepartmentId }) => {
+      const employee = await Employee.findById(employeeId);
+      if (!employee) {
+        throw new Error('Employee not found');
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      const oldDepartment = await Department.findById(employee.department);
+      if (oldDepartment) {
+        oldDepartment.employees.pull(employeeId);
+        await oldDepartment.save();
+      }
+
+      const newDepartment = await Department.findById(newDepartmentId);
+      if (!newDepartment) {
+        throw new Error('New department not found');
+      }
+
+      employee.department = newDepartmentId;
+      await employee.save();
+
+      newDepartment.employees.push(employee);
+      await newDepartment.save();
+
+      return employee;
     },
   },
 };
