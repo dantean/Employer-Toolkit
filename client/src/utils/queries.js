@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_DEPARTMENTS = gql`
-  query GetAllDepartments {
+query GetAllDepartments {
   getAllDepartments {
     _id
     employees {
+      _id
       email
       name
       department {

@@ -4,11 +4,11 @@ const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
   Query: {
-    getSingleUser: async (parent, args, context) => {
+    getAllUsers: async (parent, args, context) => {
       if (context.user) {
-        const foundUser = await User.findOne({
-          $or: [{ _id: context.user._id }, { username: context.user.username }],
-        });
+        const foundUser = await User.find({
+          
+        }).populate("departments").populate({path:"departments", populate:"employees"});
 
         if (!foundUser) {
           throw new AuthenticationError('User not found');

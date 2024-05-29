@@ -6,7 +6,7 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    department: [Department]!
+    departments: [Department]!
   }
 
   type Employee {
@@ -28,7 +28,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getSingleUser: User
+    getAllUsers: [User]
     getAllDepartments: [Department]
   }
 
