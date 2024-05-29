@@ -1,17 +1,19 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_DEPARTMENTS = gql`
-  query getAllDepartments {
-    getAllDepartments {
-      _id
+  query GetAllDepartments {
+  getAllDepartments {
+    _id
+    employees {
+      email
       name
-      employees {
+      department {
         _id
         name
-        email
       }
     }
   }
+}
 `;
 
 export const GET_SINGLE_USER = gql`

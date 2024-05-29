@@ -20,7 +20,7 @@ const resolvers = {
       throw new AuthenticationError('You need to be logged in!');
     },
     getAllDepartments: async () => {
-      return await Department.find({}).populate('employees');
+      return await Department.find({}).populate('employees').populate({path:"employees", populate:"department"});
     },
   },
 
@@ -64,6 +64,14 @@ const resolvers = {
       await department.save();
 
       return employee;
+    },
+    addDepartment: async (parent, { name },context) => {
+      const department = await Department.create({ name });
+
+      if (!department) {
+        throw new AuthenticationError('Error creating department');
+      }
+      return department;
     },
 
     reassignEmployee: async (parent, { employeeId, newDepartmentId }) => {

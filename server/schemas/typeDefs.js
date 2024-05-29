@@ -37,6 +37,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addEmployee(name: String!, email: String!, departmentId: ID!): Employee
     reassignEmployee(employeeId: ID!, newDepartmentId: ID!): Employee
+    addDepartment(name: String!): Department
   }
 `;
 
