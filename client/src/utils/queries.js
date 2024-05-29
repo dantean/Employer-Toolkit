@@ -1,17 +1,32 @@
-// Implement the getSingleUser query
-import { gql } from"@apollo/client"
-export const QUERY_ME = gql`
-query SavedBooks {
-    getSingleUser {
-      savedBooks {
+import { gql } from '@apollo/client';
+
+export const GET_ALL_DEPARTMENTS = gql`
+query GetAllDepartments {
+  getAllDepartments {
+    _id
+    employees {
+      _id
+      email
+      name
+      department {
         _id
-        authors
-        bookId
-        description
-        image
-        link
-        title
+        name
       }
     }
   }
-`
+}
+`;
+
+export const GET_SINGLE_USER = gql`
+  query getSingleUser {
+    getSingleUser {
+      _id
+      username
+      email
+      departments {
+        _id
+        name
+      }
+    }
+  }
+`;

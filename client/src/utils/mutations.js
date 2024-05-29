@@ -1,83 +1,45 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_USER = gql`
-  mutation Mutation($username: String!, $email: String!, $password: String!) {
-    createUser(username: $username, email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-        email
-        password
-        savedBooks {
-          _id
-          authors
-          bookId
-          image
-          link
-          title
-          description
-        }
-      }
-    }
+mutation CreateUser($username: String!, $email: String!, $password: String!) {
+  createUser(username: $username, email: $email, password: $password) {
+    token
   }
+}
 `;
 
-export const LOGIN = gql`
-  mutation Mutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        _id
-        username
-        email
-        password
-        savedBooks {
-          _id
-          authors
-          bookId
-          image
-          link
-          title
-          description
-        }
-      }
-    }
+export const LOGIN_USER = gql`
+mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
   }
+}
 `;
 
-export const SAVE_BOOK = gql`
-  mutation SaveBook($bookData: BookInput!) {
-    saveBook(bookData: $bookData) {
+export const ADD_EMPLOYEE = gql`
+mutation addEmployee($name: String!, $email: String!, $departmentId: ID!) {
+  addEmployee(name: $name, email: $email, departmentId: $departmentId) {
+    _id
+    name
+    email
+    department {
       _id
-      username
-      email
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
-      }
+      name
     }
   }
+}
 `;
 
-export const DELETE_BOOK = gql`
-  mutation DeleteBook($bookId: ID!) {
-    deleteBook(bookId: $bookId) {
+export const REASSIGN_EMPLOYEE = gql`
+mutation reassignEmployee($employeeId: ID!, $newDepartmentId: ID!) {
+  reassignEmployee(employeeId: $employeeId, newDepartmentId: $newDepartmentId) {
+    _id
+    name
+    email
+    department {
       _id
-      username
-      email
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
-      }
+      name
     }
   }
+}
 `;
