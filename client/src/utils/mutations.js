@@ -1,82 +1,62 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_USER = gql`
-  mutation Mutation($username: String!, $email: String!, $password: String!) {
+  mutation createUser($username: String!, $email: String!, $password: String!) {
     createUser(username: $username, email: $email, password: $password) {
       token
       user {
         _id
         username
         email
-        password
-        savedBooks {
+        departments {
           _id
-          authors
-          bookId
-          image
-          link
-          title
-          description
+          name
         }
       }
     }
   }
 `;
 
-export const LOGIN = gql`
-  mutation Mutation($email: String!, $password: String!) {
+export const LOGIN_USER = gql`
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       user {
         _id
         username
         email
-        password
-        savedBooks {
+        departments {
           _id
-          authors
-          bookId
-          image
-          link
-          title
-          description
+          name
         }
       }
     }
   }
 `;
 
-export const SAVE_BOOK = gql`
-  mutation SaveBook($bookData: BookInput!) {
-    saveBook(bookData: $bookData) {
+export const ADD_EMPLOYEE = gql`
+  mutation addEmployee($name: String!, $email: String!, $departmentId: ID!) {
+    addEmployee(name: $name, email: $email, departmentId: $departmentId) {
       _id
-      username
+      name
       email
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
+      department {
+        _id
+        name
       }
     }
   }
 `;
 
-export const DELETE_BOOK = gql`
-  mutation DeleteBook($bookId: ID!) {
-    deleteBook(bookId: $bookId) {
+export const REASSIGN_EMPLOYEE = gql`
+  mutation reassignEmployee($employeeId: ID!, $newDepartmentId: ID!) {
+    reassignEmployee(employeeId: $employeeId, newDepartmentId: $newDepartmentId) {
       _id
-      username
+      name
       email
-      savedBooks {
-        bookId
-        authors
-        image
-        link
-        title
-        description
+      department {
+        _id
+        name
       }
     }
   }
