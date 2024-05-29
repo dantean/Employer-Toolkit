@@ -40,9 +40,6 @@ Uses a service worker for offline functionality.
 Is installable.
 
 ✅
-⚪
-🔘
-
 ```
 
 
