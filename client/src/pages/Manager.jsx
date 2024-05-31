@@ -15,8 +15,8 @@ const Manager = () => {
     }
   }, [data]);
 
-  const handleReassign = async (employeeId, currentDepartmentId) => {
-    const newDepartmentId = prompt('Enter new department ID:');
+  const handleReassign = async (employeeId, currentDepartmentId, newDepartmentId) => {
+    // const newDepartmentId = prompt('Enter new department ID:');
     if (newDepartmentId && newDepartmentId !== currentDepartmentId) {
       try {
         await reassignEmployee({ variables: { employeeId, newDepartmentId } });
@@ -35,6 +35,7 @@ const Manager = () => {
           return department;
         });
         setDepartments(updatedDepartments);
+        window.location.reload();
       } catch (err) {
         console.error(err);
       }

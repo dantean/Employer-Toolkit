@@ -22,6 +22,9 @@ const resolvers = {
     getAllDepartments: async () => {
       return await Department.find({}).populate('employees').populate({path:"employees", populate:"department"});
     },
+    getAllEmployees: async () => {
+      return await Employee.find().populate('department');
+    }
   },
 
   Mutation: {

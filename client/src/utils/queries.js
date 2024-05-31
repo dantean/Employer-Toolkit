@@ -4,6 +4,7 @@ export const GET_ALL_DEPARTMENTS = gql`
 query GetAllDepartments {
   getAllDepartments {
     _id
+    name
     employees {
       _id
       email
@@ -29,4 +30,18 @@ export const GET_SINGLE_USER = gql`
       }
     }
   }
+`;
+
+export const GET_ALL_EMPLOYEES = gql`
+query GetAllEmployees {
+  getAllEmployees {
+    _id
+    name
+    email
+    department {
+      name
+      _id
+    }
+  }
+}
 `;
