@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_EMPLOYEES } from '../utils/queries';
+import { DELETE_EMPLOYEE } from '../utils/mutations';
 import auth from '../utils/auth';
 
 // const DepartmentList = ({ departments, onReassign }) => {
@@ -36,7 +37,7 @@ const DepartmentList = ({ departments, onReassign }) => {
     return <h2>Loading...</h2>
   }
   if(!auth.loggedIn()) {
-    return <h2>Please Log In.</h2>
+    return <h2 className='text-center'>Please Log In.</h2>
   }
   return (
     <div>

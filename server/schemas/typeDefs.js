@@ -39,6 +39,7 @@ const typeDefs = gql`
     addEmployee(name: String!, email: String!, departmentId: ID!): Employee
     reassignEmployee(employeeId: ID!, newDepartmentId: ID!): Employee
     addDepartment(name: String!): Department
+    deleteEmployee(employeeId: ID!): Employee
    
   }
 `;

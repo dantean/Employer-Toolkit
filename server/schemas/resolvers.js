@@ -77,11 +77,12 @@ const resolvers = {
       return department;
     },
 
-    // deleteEmployee: async (parent, { employeeId }) => {
-      //   const employee = await Employee.findOneAndDelete(employeeId);
-      //   if (!employee) {
-      //     throw new Error('Employee not found');
-      //   },
+    deleteEmployee: async (parent, { employeeId }) => {
+        const employee = await Employee.findOneAndDelete(employeeId);
+        if (!employee) {
+          throw new Error('Employee not found');
+        }
+      },
 
     reassignEmployee: async (parent, { employeeId, newDepartmentId }) => {
       const employee = await Employee.findById(employeeId);
