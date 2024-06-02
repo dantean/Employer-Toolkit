@@ -78,7 +78,8 @@ padding: 10px;">
 ## Special Thanks
 
 * Instructor Phil Loy for everything he's done for us throughout this bootcamp, especially for walking us through most of the coding for this project
-* Tutor Juno Nguyen also helped tremendously with writing the code
+* Tutor Juno Nguyen also helped tremendously with writing the code for the front end, and helping us add an automatic refresh function when modifying employees
+
 ![University of Miami](./assets/umlogo.png) ![edX](https://img.shields.io/badge/edX-%2302262B.svg?style=for-the-badge&logo=edX&logoColor=white)
 
 ## License
