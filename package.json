@@ -18,7 +18,9 @@
     "concurrently": "^8.2.0"
   },
   "dependencies": {
+    "@apollo/server": "^4.10.4",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "mongoose": "^8.4.0",
     "workbox-cacheable-response": "^7.1.0",
     "workbox-core": "^7.1.0",
