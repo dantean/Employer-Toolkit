@@ -55,6 +55,7 @@ const Manager = () => {
         return department;
       });
       setDepartments(updatedDepartments);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
