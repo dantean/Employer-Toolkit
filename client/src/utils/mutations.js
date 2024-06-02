@@ -48,6 +48,12 @@ export const DELETE_EMPLOYEE = gql`
 mutation DeleteEmployee($employeeId: ID!) {
   deleteEmployee(employeeId: $employeeId) {
     _id
+    name
+    email
+    department {
+      _id
+      name
+    }
   }
 }
 `;
