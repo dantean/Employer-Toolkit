@@ -43,3 +43,11 @@ mutation reassignEmployee($employeeId: ID!, $newDepartmentId: ID!) {
   }
 }
 `;
+
+export const DELETE_EMPLOYEE = gql`
+mutation DeleteEmployee($employeeId: ID!) {
+  deleteEmployee(employeeId: $employeeId) {
+    _id
+  }
+}
+`;

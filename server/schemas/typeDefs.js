@@ -30,6 +30,7 @@ const typeDefs = gql`
   type Query {
     getAllUsers: [User]
     getAllDepartments: [Department]
+    getAllEmployees: [Employee]
   }
 
   type Mutation {
@@ -38,7 +39,11 @@ const typeDefs = gql`
     addEmployee(name: String!, email: String!, departmentId: ID!): Employee
     reassignEmployee(employeeId: ID!, newDepartmentId: ID!): Employee
     addDepartment(name: String!): Department
+    deleteEmployee(employeeId: ID!): Employee
+   
   }
 `;
 
 module.exports = typeDefs;
+
+ // deleteEmplotyee(employeeId: ID!): Employee
