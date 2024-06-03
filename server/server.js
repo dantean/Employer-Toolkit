@@ -2,6 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
+const cors = require('cors');
 const { authMiddleware } = require('./utils/auth');
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
@@ -19,6 +20,10 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
+  app.use(cors({
+    origin: 'http://localhost:3000', // Allow requests from Vite development server
+  }));
+
   app.use('/graphql', expressMiddleware(server, {
     context: authMiddleware
   }));
@@ -26,8 +31,9 @@ const startApolloServer = async () => {
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/dist')));
 
-    app.get('/service-worker.js', (req, res) => {
-      res.sendFile(path.resolve(__dirname, '../client/dist/service-worker.js'));
+    // Serve the service worker from the dist directory
+    app.get('/src-sw.js', (req, res) => {
+      res.sendFile(path.resolve(__dirname, '../client/dist/src-sw.js'));
     });
 
     app.get('*', (req, res) => {
