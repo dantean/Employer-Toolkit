@@ -8,8 +8,8 @@ module.exports = () => {
     mode: 'development',
     // Entry point for files
     entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js',
+      main: './src/main.jsx', 
+      install: './src/install.js',
     },
     // Output for our bundles
     output: {
@@ -17,7 +17,7 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      // Webpack plugin that generates our html file and injects our bundles. 
+      // Webpack plugin that generates our html file and injects our bundles.
       new HtmlWebpackPlugin({
         template: './index.html',
         title: 'Super ETK'
@@ -25,8 +25,8 @@ module.exports = () => {
      
       // Injects our custom service worker
       new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'src-sw.js',
+        swSrc: './src/src-sw.js',
+        swDest: 'service-worker.js',
       }),
 
       // Creates a manifest.json file.
@@ -42,7 +42,7 @@ module.exports = () => {
         publicPath: './',
         icons: [
           {
-            src: path.resolve('src/images/logo.png'),
+            src: path.resolve('src/assets/img/logo.png'), 
             sizes: [96, 128, 192, 256, 384, 512],
             destination: path.join('assets', 'icons'),
           },
