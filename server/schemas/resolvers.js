@@ -1,118 +1,115 @@
-const { User, Thought } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { User, Department, Employee } = require('../models');
+const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
   Query: {
-    users: async () => {
-      return User.find().populate('thoughts');
-    },
-    user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('thoughts');
-    },
-    thoughts: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Thought.find(params).sort({ createdAt: -1 });
-    },
-    thought: async (parent, { thoughtId }) => {
-      return Thought.findOne({ _id: thoughtId });
-    },
-    me: async (parent, args, context) => {
+    getAllUsers: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('thoughts');
+        const foundUser = await User.find({
+          
+        }).populate("departments").populate({path:"departments", populate:"employees"});
+
+        if (!foundUser) {
+          throw new AuthenticationError('User not found');
+        }
+
+        return foundUser;
       }
-      throw AuthenticationError;
+
+      throw new AuthenticationError('You need to be logged in!');
     },
+    getAllDepartments: async () => {
+      return await Department.find({}).populate('employees').populate({path:"employees", populate:"department"});
+    },
+    getAllEmployees: async () => {
+      return await Employee.find().populate('department');
+    }
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
+    createUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
+
+      if (!user) {
+        throw new AuthenticationError('Error creating user');
+      }
+
       const token = signToken(user);
       return { token, user };
     },
+
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw AuthenticationError;
+        throw new AuthenticationError('No user found with this email address');
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorrect password');
       }
 
       const token = signToken(user);
-
       return { token, user };
     },
-    addThought: async (parent, { thoughtText }, context) => {
-      if (context.user) {
-        const thought = await Thought.create({
-          thoughtText,
-          thoughtAuthor: context.user.username,
-        });
 
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { thoughts: thought._id } }
-        );
-
-        return thought;
+    addEmployee: async (parent, { name, email, departmentId }) => {
+      const department = await Department.findById(departmentId);
+      if (!department) {
+        throw new Error('Department not found');
       }
-      throw AuthenticationError;
-      ('You need to be logged in!');
+
+      const employee = await Employee.create({ name, email, department: departmentId });
+      department.employees.push(employee);
+      await department.save();
+
+      return employee;
     },
-    addComment: async (parent, { thoughtId, commentText }, context) => {
-      if (context.user) {
-        return Thought.findOneAndUpdate(
-          { _id: thoughtId },
-          {
-            $addToSet: {
-              comments: { commentText, commentAuthor: context.user.username },
-            },
-          },
-          {
-            new: true,
-            runValidators: true,
-          }
-        );
-      }
-      throw AuthenticationError;
-    },
-    removeThought: async (parent, { thoughtId }, context) => {
-      if (context.user) {
-        const thought = await Thought.findOneAndDelete({
-          _id: thoughtId,
-          thoughtAuthor: context.user.username,
-        });
+    addDepartment: async (parent, { name },context) => {
+      const department = await Department.create({ name });
 
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { thoughts: thought._id } }
-        );
-
-        return thought;
+      if (!department) {
+        throw new AuthenticationError('Error creating department');
       }
-      throw AuthenticationError;
+      return department;
     },
-    removeComment: async (parent, { thoughtId, commentId }, context) => {
-      if (context.user) {
-        return Thought.findOneAndUpdate(
-          { _id: thoughtId },
-          {
-            $pull: {
-              comments: {
-                _id: commentId,
-                commentAuthor: context.user.username,
-              },
-            },
-          },
-          { new: true }
-        );
+
+    deleteEmployee: async (parent, { employeeId }) => {
+        const employee = await Employee.findOneAndDelete(employeeId);
+        if (!employee) {
+          throw new Error('Employee not found');
+        }
+      },
+
+    reassignEmployee: async (parent, { employeeId, newDepartmentId }) => {
+      const employee = await Employee.findById(employeeId);
+      if (!employee) {
+        throw new Error('Employee not found');
       }
-      throw AuthenticationError;
+
+      
+
+      const oldDepartment = await Department.findById(employee.department);
+      if (oldDepartment) {
+        oldDepartment.employees.pull(employeeId);
+        await oldDepartment.save();
+      }
+
+      const newDepartment = await Department.findById(newDepartmentId);
+      if (!newDepartment) {
+        throw new Error('New department not found');
+      }
+
+      employee.department = newDepartmentId;
+      await employee.save();
+
+      newDepartment.employees.push(employee);
+      await newDepartment.save();
+
+      return employee;
     },
   },
 };

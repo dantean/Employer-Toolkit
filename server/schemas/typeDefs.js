@@ -1,25 +1,25 @@
-const typeDefs = `
+const { gql } = require('apollo-server-express');
+
+const typeDefs = gql`
   type User {
     _id: ID
     username: String
     email: String
     password: String
-    thoughts: [Thought]!
+    departments: [Department]!
   }
 
-  type Thought {
+  type Employee {
     _id: ID
-    thoughtText: String
-    thoughtAuthor: String
-    createdAt: String
-    comments: [Comment]!
+    name: String
+    email: String
+    department: Department
   }
 
-  type Comment {
+  type Department {
     _id: ID
-    commentText: String
-    commentAuthor: String
-    createdAt: String
+    name: String
+    employees: [Employee]
   }
 
   type Auth {
@@ -28,21 +28,22 @@ const typeDefs = `
   }
 
   type Query {
-    users: [User]
-    user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(thoughtId: ID!): Thought
-    me: User
+    getAllUsers: [User]
+    getAllDepartments: [Department]
+    getAllEmployees: [Employee]
   }
 
   type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
+    createUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addComment(thoughtId: ID!, commentText: String!): Thought
-    removeThought(thoughtId: ID!): Thought
-    removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addEmployee(name: String!, email: String!, departmentId: ID!): Employee
+    reassignEmployee(employeeId: ID!, newDepartmentId: ID!): Employee
+    addDepartment(name: String!): Department
+    deleteEmployee(employeeId: ID!): Employee
+   
   }
 `;
 
 module.exports = typeDefs;
+
+ // deleteEmplotyee(employeeId: ID!): Employee
