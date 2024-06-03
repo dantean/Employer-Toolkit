@@ -32,8 +32,8 @@ const startApolloServer = async () => {
     app.use(express.static(path.join(__dirname, '../client/dist')));
 
     // Serve the service worker from the dist directory
-    app.get('/src-sw.js', (req, res) => {
-      res.sendFile(path.resolve(__dirname, '../client/dist/src-sw.js'));
+    app.get('/service-worker.js', (req, res) => {
+      res.sendFile(path.resolve(__dirname, '../client/dist/service-worker.js'));
     });
 
     app.get('*', (req, res) => {

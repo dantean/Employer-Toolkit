@@ -21,7 +21,7 @@ module.exports = () => {
       }),
       new InjectManifest({
         swSrc: './src/src-sw.js', // Source location of your service worker
-        swDest: 'src-sw.js', // Output location of your service worker in the dist directory
+        swDest: 'service-worker.js', // Output location of your service worker in the dist directory
       }),
       new WebpackPwaManifest({
         fingerprints: false,
