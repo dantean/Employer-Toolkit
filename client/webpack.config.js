@@ -20,8 +20,8 @@ module.exports = () => {
         title: 'Super ETK'
       }),
       new InjectManifest({
-        swSrc: './src/src-sw.js', // Source location of your service worker
-        swDest: 'service-worker.js', // Output location of your service worker in the dist directory
+        swSrc: './src/src-sw.js', 
+        swDest: 'service-worker.js', 
       }),
       new WebpackPwaManifest({
         fingerprints: false,
