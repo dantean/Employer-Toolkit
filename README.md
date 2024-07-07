@@ -1,4 +1,4 @@
-# Super Employee Tool Kit Version BETA
+# Employee Tool Kit BETA
 
 ## What is it?
 
